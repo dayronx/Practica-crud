@@ -12,7 +12,6 @@
         .stats-grid-mini { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 30px; }
         .stat-card-mini { background: white; padding: 20px; border-radius: 12px; border: 1px solid #e2e8f0; }
         .stat-card-mini .label { font-size: 13px; color: #64748b; font-weight: 500; display: block; margin-bottom: 8px; }
-        .stat-card-mini .value-row { display: flex; justify-content: space-between; align-items: center; }
         .stat-card-mini .value { font-size: 28px; font-weight: 800; color: #1e293b; }
         .icon-box-blue { color: #3b82f6; background: #eff6ff; width: 35px; height: 35px; display: flex; align-items: center; justify-content: center; border-radius: 8px; }
         .category-badge { background: #f1f5f9; color: #475569; padding: 5px 12px; border-radius: 6px; font-size: 12px; font-weight: 600; }
@@ -25,11 +24,22 @@
         .form-container { background: white; padding: 40px; border-radius: 12px; border: 1px solid #e2e8f0; max-width: 850px; margin-top: 20px; }
         .form-group { margin-bottom: 24px; }
         .form-group label { display: block; font-size: 13px; font-weight: 600; color: #334155; margin-bottom: 8px; }
-        .form-input { width: 100%; padding: 12px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 14px; outline: none; transition: border 0.2s; }
-        .form-input:focus { border-color: #4f46e5; }
+        .form-input { width: 100%; padding: 12px; border: 1px solid #e2e8f0; border-radius: 8px; font-size: 14px; outline: none; }
         .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
         .btn-save { background: #4f46e5; color: white; border: none; padding: 12px 24px; border-radius: 8px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px; }
         .btn-cancel { background: #f1f5f9; color: #475569; border: none; padding: 12px 24px; border-radius: 8px; font-weight: 600; cursor: pointer; }
+
+        /* NUEVOS ESTILOS PROFILE (FIGMA) */
+        .profile-layout { display: grid; grid-template-columns: 320px 1fr; gap: 30px; align-items: start; }
+        .profile-card { background: white; border-radius: 16px; border: 1px solid #e2e8f0; padding: 30px; }
+        .profile-main-card { text-align: center; }
+        .profile-img { width: 110px; height: 110px; border-radius: 50%; margin-bottom: 15px; border: 3px solid #f1f5f9; }
+        .badge-role { background: #eff6ff; color: #2563eb; padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 700; }
+        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin-top: 20px; }
+        .grid-item label { font-size: 11px; color: #94a3b8; text-transform: uppercase; font-weight: 700; margin-bottom: 5px; display: block; }
+        .grid-item p { font-size: 14px; font-weight: 600; color: #334155; }
+        .dept-badge { background: #fff7ed; color: #c2410c; padding: 4px 10px; border-radius: 6px; font-size: 12px; }
+        .btn-edit-profile { background: white; border: 1px solid #e2e8f0; padding: 8px 15px; border-radius: 8px; font-size: 12px; font-weight: 600; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -49,7 +59,7 @@
         <nav style="margin-top: 16px;">
             <a href="#" id="link-dashboard" onclick="changeView('dashboard')" class="nav-link active"><i class="fa-solid fa-border-all"></i> Dashboard</a>
             <a href="#" id="link-mytasks" onclick="changeView('mytasks')" class="nav-link"><i class="fa-solid fa-list-check"></i> My Tasks</a>
-            <a href="#" class="nav-link"><i class="fa-solid fa-user"></i> Profile</a>
+            <a href="#" id="link-profile" onclick="changeView('profile')" class="nav-link"><i class="fa-solid fa-user"></i> Profile</a>
         </nav>
     </aside>
 
@@ -81,7 +91,6 @@
                     + New Task
                 </button>
             </div>
-
             <div class="stats-grid">
                 <div class="stat-card">
                     <div class="stat-header">Total Tasks <i class="fa-solid fa-layer-group" style="color:#3b82f6;"></i></div>
@@ -104,7 +113,6 @@
                     <p class="label-green">Keep it up!</p>
                 </div>
             </div>
-
             <div class="table-section">
                 <table>
                     <thead>
@@ -126,20 +134,17 @@
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
                 <div>
                     <h2 style="font-size: 28px; font-weight: 900; color: #1e293b;">Task Management</h2>
-                    <p style="color: #94a3b8; font-size: 14px;">View, edit, and organize all academic tasks in one place.</p>
                 </div>
                 <button onclick="changeView('create-task')" style="background: #2563eb; color: white; border: none; padding: 12px 24px; border-radius: 8px; font-weight: bold; cursor: pointer;">
                     + New Task
                 </button>
             </div>
-
             <div class="stats-grid-mini">
-                <div class="stat-card-mini"><span class="label">Total Tasks</span><div class="value-row"><span class="value" id="mini-total">0</span><div class="icon-box-blue"><i class="fa-solid fa-layer-group"></i></div></div></div>
-                <div class="stat-card-mini"><span class="label">In Progress</span><div class="value-row"><span class="value" id="mini-progress">0</span><div class="icon-box-blue"><i class="fa-solid fa-spinner"></i></div></div></div>
-                <div class="stat-card-mini"><span class="label">Completed</span><div class="value-row"><span class="value" id="mini-completed">0</span><div class="icon-box-blue"><i class="fa-solid fa-circle-check"></i></div></div></div>
-                <div class="stat-card-mini"><span class="label">Pending Review</span><div class="value-row"><span class="value" id="mini-pending">0</span><div class="icon-box-blue"><i class="fa-solid fa-circle-exclamation"></i></div></div></div>
+                <div class="stat-card-mini"><span class="label">Total Tasks</span><div class="value" id="mini-total">0</div></div>
+                <div class="stat-card-mini"><span class="label">In Progress</span><div class="value" id="mini-progress">0</div></div>
+                <div class="stat-card-mini"><span class="label">Completed</span><div class="value" id="mini-completed">0</div></div>
+                <div class="stat-card-mini"><span class="label">Pending</span><div class="value" id="mini-pending">0</div></div>
             </div>
-
             <div style="background: white; border-radius: 12px; border: 1px solid #e2e8f0; overflow: hidden;">
                 <table style="width: 100%; border-collapse: collapse;">
                     <thead style="background: #f8fafc; text-align: left;">
@@ -156,73 +161,58 @@
             </div>
         </section>
 
+        <section id="view-profile" class="hidden" style="padding: 40px; background: #f8fafc; flex:1;">
+            <h2 style="font-size: 24px; font-weight: 800; color: #1e293b; margin-bottom: 24px;">My Profile</h2>
+            <div class="profile-layout">
+                <div class="profile-card profile-main-card">
+                    <img src="https://ui-avatars.com/api/?name=Sarah+Jenkins&background=cbd5e1&color=475569" class="profile-img">
+                    <h3 style="font-size: 20px; font-weight: 800; color: #1e293b;">Dr. Sarah Jenkins</h3>
+                    <span class="badge-role">System Admin</span>
+                    <div style="margin-top: 25px; padding: 12px; background: #f8fafc; border-radius: 8px; font-size: 13px; color: #64748b;">
+                        <i class="fa-regular fa-envelope"></i> sarah.jenkins@crudzaso.edu
+                    </div>
+                    <div style="margin-top: 25px;">
+                        <span style="font-size: 24px; font-weight: 800; display: block;">154</span>
+                        <span style="font-size: 12px; color: #94a3b8; font-weight: 600;">Tasks</span>
+                    </div>
+                </div>
+
+                <div class="profile-card">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+                        <h4 style="font-size: 16px; font-weight: 700;">Personal Information</h4>
+                        <button class="btn-edit-profile"><i class="fa-solid fa-pen"></i> Edit Profile</button>
+                    </div>
+                    <div class="info-grid">
+                        <div class="grid-item"><label>Full Name</label><p>Sarah Jenkins</p></div>
+                        <div class="grid-item"><label>Employee ID</label><p>CZ-882103</p></div>
+                        <div class="grid-item"><label>Phone</label><p>+1 (555) 123-4567</p></div>
+                        <div class="grid-item"><label>Department</label><p><span class="dept-badge">Computer Science</span></p></div>
+                        <div class="grid-item"><label>Role Level</label><p>Senior Administrator</p></div>
+                        <div class="grid-item"><label>Join Date</label><p>September 14, 2020</p></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <section id="view-create-task" class="hidden" style="padding: 40px 100px; background: #f8fafc; flex:1;">
             <div style="margin-bottom: 24px; color: #64748b; font-size: 13px; font-weight: 500;">
                 <span onclick="goBack()" style="cursor:pointer; color: #475569;">← Back</span> / <span style="color: #94a3b8;">Create New</span>
             </div>
-            
             <h2 style="font-size: 28px; font-weight: 800; color: #1e293b; margin-bottom: 32px;">Create New Task</h2>
-
             <div class="form-container">
                 <form id="fullTaskForm">
-                    <div class="form-group">
-                        <label>Task Title <span style="color: #ef4444;">*</span></label>
-                        <input type="text" id="full-title" class="form-input" placeholder="e.g., Complete Quarter 3 Report" required>
-                    </div>
-
+                    <div class="form-group"><label>Task Title <span style="color: #ef4444;">*</span></label><input type="text" id="full-title" class="form-input" placeholder="e.g., Complete Quarter 3 Report" required></div>
                     <div class="form-row">
-                        <div class="form-group">
-                            <label>Assign to User</label>
-                            <select id="full-userId" class="form-input" style="background: white;" required></select>
-                        </div>
-                        <div class="form-group">
-                            <label>Category</label>
-                            <select id="full-category" class="form-input" style="background: white;">
-                                <option value="Mathematics">Mathematics</option>
-                                <option value="Physics">Physics</option>
-                                <option value="History">History</option>
-                                <option value="Literature">Literature</option>
-                            </select>
-                        </div>
+                        <div class="form-group"><label>Assign to User</label><select id="full-userId" class="form-input" required></select></div>
+                        <div class="form-group"><label>Category</label><select id="full-category" class="form-input"><option>Mathematics</option><option>Physics</option><option>History</option></select></div>
                     </div>
-
                     <div class="form-row">
-                        <div class="form-group">
-                            <label>Priority</label>
-                            <select id="full-priority" class="form-input" style="background: white;">
-                                <option value="Low">Low</option>
-                                <option value="Medium" selected>Medium</option>
-                                <option value="High">High</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>Status</label>
-                            <select id="full-status" class="form-input" style="background: white;">
-                                <option value="pending">Pending</option>
-                                <option value="in-progress">In Progress</option>
-                                <option value="completed">Completed</option>
-                            </select>
-                        </div>
+                        <div class="form-group"><label>Priority</label><select id="full-priority" class="form-input"><option>Low</option><option selected>Medium</option><option>High</option></select></div>
+                        <div class="form-group"><label>Status</label><select id="full-status" class="form-input"><option value="pending">Pending</option><option value="in-progress">In Progress</option></select></div>
                     </div>
-
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label>Due Date</label>
-                            <input type="date" id="full-date" class="form-input" required>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Description</label>
-                        <textarea id="full-desc" class="form-input" style="height: 120px; resize: none;" placeholder="Add details about this task..."></textarea>
-                    </div>
-
-                    <div style="display: flex; justify-content: flex-end; gap: 16px; margin-top: 10px;">
-                        <button type="button" onclick="goBack()" class="btn-cancel">Cancel</button>
-                        <button type="submit" class="btn-save">
-                            <i class="fa-solid fa-floppy-disk"></i> Save Task
-                        </button>
-                    </div>
+                    <div class="form-group"><label>Due Date</label><input type="date" id="full-date" class="form-input" required></div>
+                    <div class="form-group"><label>Description</label><textarea id="full-desc" class="form-input" style="height: 100px; resize: none;"></textarea></div>
+                    <div style="display: flex; justify-content: flex-end; gap: 16px;"><button type="button" onclick="goBack()" class="btn-cancel">Cancel</button><button type="submit" class="btn-save">Save Task</button></div>
                 </form>
             </div>
         </section>
@@ -234,32 +224,38 @@
         let lastView = 'dashboard';
 
         function changeView(viewName) {
-            // Guardar de donde venimos para el botón volver
             if (viewName !== 'create-task') lastView = viewName;
 
-            const views = ['view-dashboard', 'view-mytasks', 'view-create-task'];
+            const views = ['view-dashboard', 'view-mytasks', 'view-create-task', 'view-profile'];
             views.forEach(v => document.getElementById(v).classList.add('hidden'));
 
             const activeView = document.getElementById(`view-${viewName}`);
             if (activeView) activeView.classList.remove('hidden');
 
             const breadcrumb = document.getElementById('breadcrumb');
-            const linkDashboard = document.getElementById('link-dashboard');
-            const linkMytasks = document.getElementById('link-mytasks');
+            const links = {
+                dashboard: document.getElementById('link-dashboard'),
+                mytasks: document.getElementById('link-mytasks'),
+                profile: document.getElementById('link-profile')
+            };
+
+            // Reset active classes
+            Object.values(links).forEach(l => l.classList.remove('active'));
 
             if (viewName === 'dashboard') {
                 breadcrumb.innerText = "/ Dashboard";
-                linkDashboard.classList.add('active');
-                linkMytasks.classList.remove('active');
+                links.dashboard.classList.add('active');
                 loadDashboard();
             } else if (viewName === 'mytasks') {
                 breadcrumb.innerText = "/ My Tasks";
-                linkDashboard.classList.remove('active');
-                linkMytasks.classList.add('active');
+                links.mytasks.classList.add('active');
                 loadMyTasksTable();
+            } else if (viewName === 'profile') {
+                breadcrumb.innerText = "/ Profile";
+                links.profile.classList.add('active');
             } else if (viewName === 'create-task') {
                 breadcrumb.innerText = "/ Create New Task";
-                loadUserOptionsFull(); // Cargar usuarios en el select
+                loadUserOptionsFull();
             }
         }
 
@@ -279,33 +275,20 @@
                 const users = await uRes.json();
 
                 document.getElementById('stat-total').innerText = tasks.length;
-                const completedCount = tasks.filter(t => t.status === 'completed').length;
-                document.getElementById('stat-completed').innerText = completedCount;
-                document.getElementById('stat-pending').innerText = tasks.length - completedCount;
+                document.getElementById('stat-completed').innerText = tasks.filter(t => t.status === 'completed').length;
+                document.getElementById('stat-pending').innerText = tasks.filter(t => t.status !== 'completed').length;
 
                 const container = document.getElementById('admin-taskList');
-                const priorityColors = { 'High': '#ef4444', 'Medium': '#f59e0b', 'Low': '#10b981' };
-
                 container.innerHTML = tasks.map(t => {
                     const user = users.find(u => String(u.id) === String(t.userId)) || { name: 'Student' };
-                    let statusClass = t.status === 'completed' ? "bg-completed" : "bg-in-progress";
-                    const pColor = priorityColors[t.priority] || '#94a3b8';
-                    return `
-                        <tr>
-                            <td style="font-weight: bold; color: #334155;">${t.title}</td>
-                            <td style="color: #64748b;">${user.name}</td>
-                            <td><span class="status-badge ${statusClass}">${t.status}</span></td>
-                            <td>
-                                <div style="display: flex; align-items: center; gap: 10px;">
-                                    <div style="width: 10px; height: 10px; border-radius: 50%; background-color: ${pColor};"></div>
-                                    <span style="color: #1e293b;">${t.priority}</span>
-                                </div>
-                            </td>
-                            <td style="color: ${t.priority === 'High' ? '#ef4444' : '#64748b'}; font-weight: 500;">${t.date || '---'}</td>
-                            <td style="text-align:center;">
-                                <i onclick="deleteTask('${t.id}')" class="fa-solid fa-trash" style="color: #cbd5e1; cursor:pointer;"></i>
-                            </td>
-                        </tr>`;
+                    return `<tr>
+                        <td style="font-weight: bold;">${t.title}</td>
+                        <td>${user.name}</td>
+                        <td><span class="status-badge ${t.status === 'completed' ? 'bg-completed' : 'bg-in-progress'}">${t.status}</span></td>
+                        <td>${t.priority}</td>
+                        <td>${t.date || '---'}</td>
+                        <td style="text-align:center;"><i onclick="deleteTask('${t.id}')" class="fa-solid fa-trash" style="color: #cbd5e1; cursor:pointer;"></i></td>
+                    </tr>`;
                 }).join('');
             } catch (err) { console.error(err); }
         }
@@ -313,26 +296,13 @@
         async function loadMyTasksTable() {
             const res = await fetch(API_TASKS);
             const tasks = await res.json();
-            
             document.getElementById('mini-total').innerText = tasks.length;
-            document.getElementById('mini-progress').innerText = tasks.filter(t => t.status === 'in-progress').length;
-            document.getElementById('mini-completed').innerText = tasks.filter(t => t.status === 'completed').length;
-            document.getElementById('mini-pending').innerText = tasks.filter(t => t.status === 'pending').length;
-
             document.getElementById('mytasks-list').innerHTML = tasks.map(t => `
                 <tr style="border-bottom: 1px solid #f1f5f9;">
                     <td style="padding: 16px;"><input type="checkbox"></td>
-                    <td style="padding: 16px;">
-                        <div style="font-weight: 600; color: #1e293b;">${t.title}</div>
-                        <div style="font-size: 11px; color: #94a3b8;">ID: #TASK-${t.id} • Due ${t.date}</div>
-                    </td>
+                    <td style="padding: 16px;"><strong>${t.title}</strong></td>
                     <td style="padding: 16px;"><span class="category-badge">${t.category || 'Academic'}</span></td>
-                    <td style="padding: 16px;">
-                         <div style="display: flex; align-items: center; gap: 8px;">
-                            <div style="width: 8px; height: 8px; border-radius: 50%; background: ${t.priority === 'High' ? '#ef4444' : '#f59e0b'}"></div>
-                            ${t.priority}
-                        </div>
-                    </td>
+                    <td style="padding: 16px;">${t.priority}</td>
                     <td style="padding: 16px;"><span class="status-pill ${t.status}">${t.status}</span></td>
                 </tr>
             `).join('');
@@ -354,12 +324,8 @@
             changeView('dashboard');
         });
 
-        async function deleteTask(id) {
-            if(confirm('Delete task?')) { await fetch(`${API_TASKS}/${id}`, { method: 'DELETE' }); loadDashboard(); }
-        }
-
+        async function deleteTask(id) { if(confirm('Delete task?')) { await fetch(`${API_TASKS}/${id}`, { method: 'DELETE' }); loadDashboard(); } }
         function logout() { localStorage.clear(); window.location.href = 'index.html'; }
-
         loadDashboard();
     </script>
 </body>
