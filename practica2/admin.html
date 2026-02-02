@@ -3,135 +3,130 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CRUDZASO - Task Manager</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <title>CRUDZASO - Admin Dashboard</title>
+    <link rel="stylesheet" href="admin-style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
-<body class="bg-[#f1f5f9] min-h-screen flex font-sans text-slate-800">
+<body>
 
-    <aside class="w-64 bg-white border-r border-gray-200 flex flex-col">
-        <div class="p-6 flex items-center gap-3">
-            <div class="bg-red-600 w-10 h-10 rounded-lg flex items-center justify-center shadow-md">
-                <span class="text-white font-black text-2xl">C</span>
+    <aside class="sidebar">
+        <div class="logo-container">
+            <div class="logo-red-box">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M10 2h4l1 4h-6l1-4z"></path>
+                    <path d="M10 6l-1 9 3 7 3-7-1-9h-4z"></path>
+                    <line x1="11" y1="10" x2="13" y2="10"></line>
+                    <line x1="10.5" y1="14" x2="13.5" y2="14"></line>
+                </svg>
             </div>
-            <span class="text-xl font-bold tracking-tight text-slate-800">CRUDZASO</span>
+            <span style="font-size: 20px; font-weight: bold;">CRUDZASO</span>
         </div>
-
-        <nav class="flex-1 px-4 space-y-1 mt-4">
-            <a href="#" class="flex items-center gap-3 p-3 bg-blue-50 text-blue-600 rounded-xl font-bold shadow-sm">
-                <i class="fa-solid fa-border-all"></i> Dashboard
-            </a>
-            <a href="#" class="flex items-center gap-3 p-3 text-slate-400 hover:bg-gray-50 rounded-xl transition">
-                <i class="fa-solid fa-list-check"></i> My Tasks
-            </a>
-            <a href="#" class="flex items-center gap-3 p-3 text-slate-400 hover:bg-gray-50 rounded-xl transition">
-                <i class="fa-solid fa-user"></i> Profile
-            </a>
+        <nav style="margin-top: 16px;">
+            <a href="#" class="nav-link active"><i class="fa-solid fa-border-all"></i> Dashboard</a>
+            <a href="#" class="nav-link"><i class="fa-solid fa-list-check"></i> My Tasks</a>
+            <a href="#" class="nav-link"><i class="fa-solid fa-user"></i> Profile</a>
         </nav>
     </aside>
 
-    <main class="flex-1 flex flex-col">
-        <header class="h-16 flex items-center justify-between px-8 bg-transparent">
-            <div class="flex items-center gap-2 text-xs font-medium text-slate-400">
-                <i class="fa-solid fa-house"></i> <span>/ Dashboard</span>
+    <main style="flex: 1; display: flex; flex-direction: column;">
+        <header>
+            <div style="font-size: 11px; color: #94a3b8; font-weight: 600;">
+                <i class="fa-solid fa-house"></i> <span style="margin-left: 8px;">/ Dashboard</span>
             </div>
-            <div class="flex items-center gap-4">
-                <i class="fa-solid fa-bell text-slate-400 cursor-pointer"></i>
-                <div class="flex items-center gap-3 border-l pl-4 cursor-pointer group">
-                    <div class="text-right">
-                        <p class="text-xs font-bold text-slate-700" id="admin-name">Admin User</p>
-                        <p class="text-[9px] text-slate-400 uppercase font-bold">System Admin</p>
+            <div style="display: flex; align-items: center; gap: 16px;">
+                <i class="fa-solid fa-bell" style="color: #cbd5e1; cursor: pointer;"></i>
+                <div style="display: flex; align-items: center; gap: 12px; border-left: 1px solid #e2e8f0; padding-left: 16px;">
+                    <div style="text-align: right;">
+                        <p id="admin-name" style="font-size: 12px; font-weight: 800; color: #334155;">Admin User</p>
+                        <p style="font-size: 9px; color: #94a3b8; font-weight: bold;">SYSTEM ADMIN</p>
                     </div>
-                    <img src="https://ui-avatars.com/api/?name=Admin&background=cbd5e1&color=475569" class="w-8 h-8 rounded-full border border-white shadow-sm">
-                    <i class="fa-solid fa-chevron-down text-[10px] text-slate-400"></i>
-                    <button onclick="logout()" class="ml-2 text-red-500 bg-red-50 p-2 rounded-lg hover:bg-red-500 hover:text-white transition">
-                        <i class="fa-solid fa-right-from-bracket"></i>
-                    </button>
+                    <img src="https://ui-avatars.com/api/?name=Admin&background=cbd5e1&color=475569" style="width: 32px; height: 32px; border-radius: 50%;">
+                    <button onclick="logout()" class="btn-logout-red"><i class="fa-solid fa-right-from-bracket"></i></button>
                 </div>
             </div>
         </header>
 
-        <section class="p-8 pt-2 space-y-6">
-            <div class="flex justify-between items-center">
+        <section style="padding: 24px 32px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px;">
                 <div>
-                    <h2 class="text-2xl font-black text-slate-800">Task Manager</h2>
-                    <p class="text-slate-400 text-sm">Overview of your current academic performance tasks.</p>
+                    <h2 style="font-size: 28px; font-weight: 900; color: #1e293b;">Task Manager</h2>
+                    <p style="color: #94a3b8; font-size: 14px;">Overview of your current academic performance tasks.</p>
                 </div>
-                <button onclick="toggleModal(true)" class="bg-[#2563eb] text-white px-6 py-2 rounded-xl font-bold shadow-lg shadow-blue-200 flex items-center gap-2 text-sm">
-                    <i class="fa-solid fa-plus"></i> New Task
+                <button onclick="toggleModal(true)" style="background: #2563eb; color: white; border: none; padding: 12px 24px; border-radius: 12px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);">
+                    + New Task
                 </button>
             </div>
 
-            <div class="grid grid-cols-4 gap-6">
-                <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
-                    <div class="flex justify-between items-start text-slate-400 mb-4"><p class="text-xs font-bold uppercase">Total Tasks</p><i class="fa-solid fa-layer-group text-blue-500"></i></div>
-                    <p class="text-3xl font-black" id="stat-total">0</p>
-                    <p class="text-[10px] text-green-500 font-bold mt-2"><i class="fa-solid fa-arrow-trend-up"></i> +12% from last week</p>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-header">Total Tasks <i class="fa-solid fa-layer-group" style="color:#3b82f6;"></i></div>
+                    <p class="stat-number" id="stat-total">0</p>
+                    <p class="label-green">↑ +12% from last week</p>
                 </div>
-                <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
-                    <div class="flex justify-between items-start text-slate-400 mb-4"><p class="text-xs font-bold uppercase">Completed</p><i class="fa-solid fa-circle-check text-green-500"></i></div>
-                    <p class="text-3xl font-black" id="stat-completed">0</p>
-                    <p class="text-[10px] text-green-500 font-bold mt-2">✓ On track</p>
+                <div class="stat-card">
+                    <div class="stat-header">Completed <i class="fa-solid fa-circle-check" style="color:#22c55e;"></i></div>
+                    <p class="stat-number" id="stat-completed">0</p>
+                    <p class="label-green">✓ On track</p>
                 </div>
-                <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
-                    <div class="flex justify-between items-start text-slate-400 mb-4"><p class="text-xs font-bold uppercase">Completed</p><i class="fa-solid fa-clock text-orange-500"></i></div>
-                    <p class="text-3xl font-black" id="stat-pending">0</p>
-                    <p class="text-[10px] text-orange-600 font-bold mt-2">2 High Priority</p>
+                <div class="stat-card">
+                    <div class="stat-header">Pending <i class="fa-solid fa-clock" style="color:#f97316;"></i></div>
+                    <p class="stat-number" id="stat-pending">0</p>
+                    <p class="label-orange">2 High Priority</p>
                 </div>
-                <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
-                    <div class="flex justify-between items-start text-slate-400 mb-4"><p class="text-xs font-bold uppercase">Overall Progress</p><i class="fa-solid fa-chart-line text-purple-500"></i></div>
-                    <p class="text-3xl font-black" id="stat-progress">75%</p>
-                    <p class="text-[10px] text-purple-500 font-bold mt-2 tracking-tighter uppercase">Keep it up!</p>
+                <div class="stat-card">
+                    <div class="stat-header">Overall Progress <i class="fa-solid fa-chart-line" style="color:#a855f7;"></i></div>
+                    <p class="stat-number" id="stat-progress">75%</p>
+                    <p class="label-green">Keep it up!</p>
                 </div>
             </div>
 
-            <div class="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm flex flex-col gap-4">
-                <div class="flex items-center justify-between">
-                    <div class="relative w-72">
-                        <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-slate-300"></i>
-                        <input type="text" placeholder="Search tasks...." class="w-full pl-10 pr-4 py-2 bg-slate-50 border-none rounded-xl text-xs outline-none focus:ring-1 focus:ring-blue-100">
+            <div class="table-section">
+                <div class="search-container">
+                    <div class="search-input-wrapper">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input type="text" placeholder="Search tasks...." class="search-input">
                     </div>
-                    <div class="flex bg-slate-100 p-1 rounded-xl text-[10px] font-black uppercase">
-                        <button class="px-4 py-1.5 text-slate-500">All Tasks</button>
-                        <button class="px-4 py-1.5 text-slate-500">Pending</button>
-                        <button class="px-4 py-1.5 bg-white shadow-sm rounded-lg text-slate-800">Completed</button>
+                    <div class="filter-bar">
+                        <button class="filter-btn">All Tasks</button>
+                        <button class="filter-btn">Pending</button>
+                        <button class="filter-btn active">Completed</button>
                     </div>
                 </div>
 
-                <table class="w-full text-left">
-                    <thead class="text-[10px] uppercase font-black text-slate-300 border-b border-slate-50">
+                <table>
+                    <thead>
                         <tr>
-                            <th class="py-4 px-2">Task Name</th>
-                            <th class="py-4 px-2">Assignee</th>
-                            <th class="py-4 px-2">Status</th>
-                            <th class="py-4 px-2">Priority</th>
-                            <th class="py-4 px-2">Due Date</th>
-                            <th class="py-4 px-2 text-center">Actions</th>
+                            <th>Task Name</th>
+                            <th>Assignee</th>
+                            <th>Status</th>
+                            <th>Priority</th>
+                            <th>Due Date</th>
+                            <th style="text-align:center;">Actions</th>
                         </tr>
                     </thead>
-                    <tbody id="admin-taskList" class="text-xs divide-y divide-slate-50"></tbody>
+                    <tbody id="admin-taskList"></tbody>
                 </table>
             </div>
         </section>
     </main>
 
-    <div id="taskModal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center hidden z-50">
-        <div class="bg-white p-8 rounded-[2rem] w-full max-w-md shadow-2xl">
-            <h3 class="text-xl font-black mb-6">New Task Assignment</h3>
-            <form id="createTaskForm" class="space-y-4">
-                <input type="text" id="modal-taskTitle" placeholder="Task Name" class="w-full p-4 bg-slate-50 rounded-2xl outline-none" required>
-                <select id="modal-userId" class="w-full p-4 bg-slate-50 rounded-2xl outline-none" required></select>
-                <div class="grid grid-cols-2 gap-4">
-                    <select id="modal-priority" class="p-4 bg-slate-50 rounded-2xl outline-none">
+    <div id="taskModal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <h3 style="font-size: 20px; font-weight: 900; margin-bottom: 24px;">New Task Assignment</h3>
+            <form id="createTaskForm" style="display: flex; flex-direction: column; gap: 16px;">
+                <input type="text" id="modal-taskTitle" placeholder="Task Name" style="padding: 14px; background: #f8fafc; border: none; border-radius: 16px; outline: none;" required>
+                <select id="modal-userId" style="padding: 14px; background: #f8fafc; border: none; border-radius: 16px; outline: none;" required></select>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                    <select id="modal-priority" style="padding: 14px; background: #f8fafc; border: none; border-radius: 16px; outline: none;">
                         <option value="High">High</option>
                         <option value="Medium" selected>Medium</option>
                         <option value="Low">Low</option>
                     </select>
-                    <input type="date" id="modal-date" class="p-4 bg-slate-50 rounded-2xl outline-none">
+                    <input type="date" id="modal-date" style="padding: 14px; background: #f8fafc; border: none; border-radius: 16px; outline: none;" required>
                 </div>
-                <div class="flex gap-4 pt-4">
-                    <button type="button" onclick="toggleModal(false)" class="flex-1 font-bold text-slate-400 uppercase text-xs tracking-widest">Cancel</button>
-                    <button type="submit" class="flex-1 bg-blue-600 text-white p-4 rounded-2xl font-bold shadow-lg shadow-blue-100 uppercase text-xs tracking-widest">Assign</button>
+                <div style="display: flex; gap: 16px; margin-top: 16px;">
+                    <button type="button" onclick="toggleModal(false)" style="flex: 1; background: transparent; border: none; color: #94a3b8; font-weight: bold; cursor: pointer;">CANCEL</button>
+                    <button type="submit" id="submit-btn" style="flex: 1; background: #2563eb; color: white; border: none; padding: 14px; border-radius: 16px; font-weight: bold; cursor: pointer;">ASSIGN</button>
                 </div>
             </form>
         </div>
@@ -140,23 +135,7 @@
     <script>
         const API_TASKS = "http://localhost:3000/tasks";
         const API_USERS = "http://localhost:3000/users";
-        const session = JSON.parse(localStorage.getItem('session'));
-
-        if (!session || session.role !== 'admin') window.location.href = 'index.html';
-        document.getElementById('admin-name').innerText = session.name || "Admin";
-
-        function toggleModal(show) {
-            document.getElementById('taskModal').classList.toggle('hidden', !show);
-            if(show) loadUserOptions();
-        }
-
-        async function loadUserOptions() {
-            const res = await fetch(API_USERS);
-            const users = await res.json();
-            document.getElementById('modal-userId').innerHTML = users.filter(u => u.role !== 'admin').map(u => 
-                `<option value="${u.id}">${u.name}</option>`
-            ).join('');
-        }
+        let editingTaskId = null;
 
         async function loadDashboard() {
             const [tRes, uRes] = await Promise.all([fetch(API_TASKS), fetch(API_USERS)]);
@@ -164,60 +143,131 @@
             const users = await uRes.json();
 
             document.getElementById('stat-total').innerText = tasks.length;
-            const completed = tasks.filter(t => t.status === 'completed').length;
-            document.getElementById('stat-completed').innerText = completed;
-            document.getElementById('stat-pending').innerText = tasks.length - completed;
-            document.getElementById('stat-progress').innerText = tasks.length ? Math.round((completed/tasks.length)*100) + '%' : '0%';
+            const completedCount = tasks.filter(t => t.status === 'completed').length;
+            document.getElementById('stat-completed').innerText = completedCount;
+            document.getElementById('stat-pending').innerText = tasks.length - completedCount;
 
             const container = document.getElementById('admin-taskList');
+            
+            // Colores exactos para la prioridad
+            const priorityColors = {
+                'High': '#ef4444',
+                'Medium': '#f59e0b',
+                'Low': '#10b981'
+            };
+
             container.innerHTML = tasks.map(t => {
                 const user = users.find(u => u.id == t.userId) || { name: 'Student' };
-                const pColor = t.priority === 'High' ? 'text-red-500' : (t.priority === 'Low' ? 'text-green-500' : 'text-orange-500');
-                const dotColor = t.priority === 'High' ? 'bg-red-500' : (t.priority === 'Low' ? 'bg-green-500' : 'bg-orange-500');
+                let statusClass = t.status === 'completed' ? "bg-completed" : "bg-in-progress";
+                let statusText = t.status === 'completed' ? "Completed" : "In Progress";
                 
+                const pColor = priorityColors[t.priority] || '#94a3b8';
+                const isHigh = t.priority === 'High';
+
                 return `
-                    <tr class="hover:bg-slate-50 transition-all font-medium">
-                        <td class="py-5 px-2 font-bold text-slate-700">${t.title}</td>
-                        <td class="py-5 px-2 text-slate-500">${user.name}</td>
-                        <td class="py-5 px-2">
-                            <span class="px-3 py-1 bg-blue-50 text-blue-500 rounded-lg text-[10px] font-black uppercase">In Progress</span>
-                        </td>
-                        <td class="py-5 px-2">
-                            <div class="flex items-center gap-2">
-                                <div class="w-2 h-2 rounded-full ${dotColor}"></div>
-                                <span class="text-[10px] font-black uppercase ${pColor}">${t.priority}</span>
+                    <tr>
+                        <td style="font-weight: bold; color: #334155;">${t.title}</td>
+                        <td style="color: #64748b;">${user.name}</td>
+                        <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+                        <td>
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <div style="width: 10px; height: 10px; border-radius: 50%; background-color: ${pColor}; flex-shrink: 0;"></div>
+                                <span style="color: #1e293b; font-size: 14px; font-weight: 500;">${t.priority}</span>
                             </div>
                         </td>
-                        <td class="py-5 px-2 text-slate-400 font-bold">${t.date || 'Oct 24, 2023'}</td>
-                        <td class="py-5 px-2 text-center">
-                            <div class="flex justify-center gap-3">
-                                <i class="fa-solid fa-pen text-slate-300 hover:text-blue-500 cursor-pointer"></i>
-                                <i onclick="deleteTask(${t.id})" class="fa-solid fa-trash text-slate-300 hover:text-red-500 cursor-pointer"></i>
+                        <td style="color: ${isHigh ? '#ef4444' : '#64748b'}; font-weight: 500;">
+                            ${t.date || 'Oct 24, 2023'}
+                        </td>
+                        <td style="text-align:center;">
+                            <div style="display:flex; justify-content:center; gap:12px;">
+                                <i onclick="editTask(${t.id})" class="fa-solid fa-pen" style="color: #cbd5e1; cursor:pointer;"></i>
+                                <i onclick="deleteTask(${t.id})" class="fa-solid fa-trash" style="color: #cbd5e1; cursor:pointer;"></i>
                             </div>
                         </td>
                     </tr>`;
             }).join('');
         }
 
+        async function editTask(id) {
+            editingTaskId = id;
+            const res = await fetch(`${API_TASKS}/${id}`);
+            const task = await res.json();
+            await loadUserOptions();
+            
+            document.getElementById('modal-taskTitle').value = task.title;
+            document.getElementById('modal-userId').value = task.userId;
+            document.getElementById('modal-priority').value = task.priority;
+            document.getElementById('modal-date').value = task.date || "";
+            
+            document.querySelector('#taskModal h3').innerText = "Edit Task";
+            document.getElementById('submit-btn').innerText = "SAVE CHANGES";
+            toggleModal(true);
+        }
+
+        function toggleModal(show) {
+            const modal = document.getElementById('taskModal');
+            if (!show) {
+                editingTaskId = null;
+                document.getElementById('createTaskForm').reset();
+                document.querySelector('#taskModal h3').innerText = "New Task Assignment";
+                document.getElementById('submit-btn').innerText = "ASSIGN";
+            }
+            modal.classList.toggle('hidden', !show);
+            if(show && !editingTaskId) loadUserOptions();
+        }
+
+        async function loadUserOptions() {
+            const res = await fetch(API_USERS);
+            const users = await res.json();
+            document.getElementById('modal-userId').innerHTML = users
+                .filter(u => u.role !== 'admin')
+                .map(u => `<option value="${u.id}">${u.name}</option>`)
+                .join('');
+        }
+
         document.getElementById('createTaskForm').addEventListener('submit', async (e) => {
             e.preventDefault();
+            const taskDate = document.getElementById('modal-date').value;
+            const today = new Date().toISOString().split('T')[0];
+
+            if (taskDate < today) {
+                alert("Please select a current or future date.");
+                return;
+            }
+
             const data = {
                 title: document.getElementById('modal-taskTitle').value,
                 userId: document.getElementById('modal-userId').value,
                 priority: document.getElementById('modal-priority').value,
-                date: document.getElementById('modal-date').value,
-                status: 'pending'
+                date: taskDate
             };
-            await fetch(API_TASKS, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(data) });
+
+            if (!editingTaskId) data.status = 'pending';
+
+            const url = editingTaskId ? `${API_TASKS}/${editingTaskId}` : API_TASKS;
+            const method = editingTaskId ? 'PATCH' : 'POST';
+
+            await fetch(url, { 
+                method: method, 
+                headers: {'Content-Type': 'application/json'}, 
+                body: JSON.stringify(data) 
+            });
+
             toggleModal(false);
             loadDashboard();
         });
 
         async function deleteTask(id) {
-            if(confirm('Delete task?')) { await fetch(`${API_TASKS}/${id}`, { method: 'DELETE' }); loadDashboard(); }
+            if(confirm('Delete task?')) { 
+                await fetch(`${API_TASKS}/${id}`, { method: 'DELETE' }); 
+                loadDashboard(); 
+            }
         }
 
-        function logout() { localStorage.clear(); window.location.href = 'index.html'; }
+        function logout() { 
+            localStorage.clear(); 
+            window.location.href = 'index.html'; 
+        }
 
         loadDashboard();
     </script>
