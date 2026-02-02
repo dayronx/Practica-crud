@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRUDZASO - Auth</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="logo-container">
+        <div class="logo-box">
+            <svg fill="currentColor" viewBox="0 0 20 20">
+                <path d="M13 7H7v6h6V7z"/><path fill-rule="evenodd" d="M2 18a2 2 0 012-2h12a2 2 0 012 2v2H2v-2zM4 2a2 2 0 012-2h8a2 2 0 012 2v12a2 2 0 01-2 2H6a2 2 0 01-2-2V2z" clip-rule="evenodd"/>
+            </svg>
+        </div>
+        <span class="logo-text">CRUDZASO</span>
+    </div>
+
+    <div class="auth-card">
+        <div class="auth-header">
+            <h2 id="formTitle">Welcome back</h2>
+            <p id="formSub">Enter your credentials to access the platform</p>
+        </div>
+        
+        <form id="authForm">
+            <div id="nameGroup" class="form-group hidden">
+                <label class="form-label">Full Name</label>
+                <input type="text" id="fullname" placeholder="John Doe" class="form-input">
+            </div>
+
+            <div class="form-group">
+                <label id="emailLabel" class="form-label">Email or username</label>
+                <input type="email" id="email" placeholder="student@university.edu" class="form-input" required>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Password</label>
+                <input type="password" id="password" placeholder="Create a password" class="form-input" required>
+            </div>
+
+            <div id="confirmGroup" class="form-group hidden">
+                <label class="form-label">Confirm Password</label>
+                <input type="password" id="confirmPassword" placeholder="Confirm password" class="form-input">
+            </div>
+
+            <button type="submit" id="submitBtn" class="btn-submit">Sign in</button>
+        </form>
+
+        <div class="auth-footer">
+            <p>
+                <span id="toggleText">Don't have an account?</span> 
+                <button id="toggleAuth">Register</button>
+            </p>
+        </div>
+    </div>
+
+    <script>
+        const API_USERS = "http://localhost:3000/users";
+        let isLogin = true;
+
+        const authForm = document.getElementById('authForm');
+        const toggleBtn = document.getElementById('toggleAuth');
+        const formTitle = document.getElementById('formTitle');
+        const formSub = document.getElementById('formSub');
+        const submitBtn = document.getElementById('submitBtn');
+        const toggleText = document.getElementById('toggleText');
+        
+        const nameGroup = document.getElementById('nameGroup');
+        const confirmGroup = document.getElementById('confirmGroup');
+        const emailLabel = document.getElementById('emailLabel');
+
+        toggleBtn.addEventListener('click', () => {
+            isLogin = !isLogin;
+            if (isLogin) {
+                formTitle.innerText = 'Welcome back';
+                formSub.innerText = 'Enter your credentials to access the platform';
+                emailLabel.innerText = 'Email or username';
+                submitBtn.innerText = 'Sign in';
+                toggleText.innerText = "Don't have an account?";
+                toggleBtn.innerText = 'Register';
+                nameGroup.classList.add('hidden');
+                confirmGroup.classList.add('hidden');
+            } else {
+                formTitle.innerText = 'Create account';
+                formSub.innerText = 'Join the academic performance platform today';
+                emailLabel.innerText = 'Email address';
+                submitBtn.innerText = 'Register';
+                toggleText.innerText = 'Already have an account?';
+                toggleBtn.innerText = 'Sign in';
+                nameGroup.classList.remove('hidden');
+                confirmGroup.classList.remove('hidden');
+            }
+        });
+
+        authForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const pass = document.getElementById('password').value;
+
+            if (isLogin) {
+                const res = await fetch(`${API_USERS}?username=${email}&password=${pass}`);
+                const users = await res.json();
+                if (users.length > 0) {
+                    localStorage.setItem('session', JSON.stringify(users[0]));
+                    window.location.href = users[0].role === 'admin' ? 'admin.html' : 'user.html';
+                } else { alert('Invalid credentials'); }
+            } else {
+                const name = document.getElementById('fullname').value;
+                const confirm = document.getElementById('confirmPassword').value;
+                if (pass !== confirm) { alert('Passwords do not match'); return; }
+                const newUser = { username: email, password: pass, role: 'user', name: name || email.split('@')[0] };
+                await fetch(API_USERS, {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(newUser)
+                });
+                alert('Account created successfully!');
+                location.reload();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>CRUDTASK - Usuario</title>
+    <script src="https://cdn.tailwindcss.com"></script> </head>
+<body class="bg-gray-50 min-h-screen">
+    <nav class="bg-blue-600 text-white p-4 shadow-md flex justify-between items-center">
+        <h1 class="text-xl font-bold">CRUDTASK</h1>
+        <div class="flex gap-6">
+            <button onclick="showSection('tasks')" class="hover:text-blue-200 font-medium">Mis Tareas</button>
+            <button onclick="showSection('profile')" class="hover:text-blue-200 font-medium">Mi Perfil</button>
+        </div>
+    </nav>
+
+    <main class="max-w-4xl mx-auto mt-10 p-4">
+        <section id="tasks-section">
+            <div class="bg-white p-6 rounded-lg shadow-sm mb-8">
+                <h2 class="text-lg font-bold mb-4 text-gray-700">Nueva Tarea</h2>
+                <div class="flex gap-2">
+                    <input type="text" id="taskTitle" placeholder="Ej: Estudiar para el examen..." class="flex-1 border p-2 rounded outline-none focus:ring-2 focus:ring-blue-400">
+                    <button onclick="createTask()" class="bg-green-600 text-white px-6 py-2 rounded font-bold hover:bg-green-700 transition">Añadir</button>
+                </div>
+            </div>
+            <div id="taskList" class="space-y-4"></div> </section>
+
+        <section id="profile-section" class="hidden">
+            <div class="bg-white p-8 rounded-xl shadow-lg max-w-md mx-auto text-center">
+                <div class="w-20 h-20 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl font-black">
+                    <span id="p-initial"></span> </div>
+                <h2 class="text-2xl font-bold text-gray-800" id="p-name-display"></h2> <p class="text-gray-500 mb-6" id="p-email-display"></p> <div class="border-t pt-6 space-y-4">
+                    <div class="text-left">
+                        <label class="text-xs font-bold text-gray-400 uppercase">Rol Asignado</label>
+                        <p class="bg-gray-100 p-2 rounded text-gray-600 mt-1">Usuario Estudiante</p>
+                    </div>
+                    
+                    <button onclick="logout()" class="w-full bg-red-500 text-white py-3 rounded-lg font-bold hover:bg-red-600 transition shadow-md">
+                        Cerrar Sesión
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        // RECUPERACIÓN DE SESIÓN: Extrae los datos del usuario guardados al iniciar sesión
+        const session = JSON.parse(localStorage.getItem('session')); // Obtiene el objeto de sesión del navegador
+        if (!session || session.role !== 'user') window.location.href = 'index.html'; // Si no hay sesión o no es 'user', redirige fuera
+
+        // Función para intercambiar la visibilidad de las secciones (pestañas)
+        function showSection(name) {
+            document.getElementById('tasks-section').classList.toggle('hidden', name !== 'tasks'); // Oculta/Muestra tareas
+            document.getElementById('profile-section').classList.toggle('hidden', name !== 'profile'); // Oculta/Muestra perfil
+            if(name === 'profile') loadProfile(); // Si elige perfil, carga los datos del usuario
+        }
+
+        // Carga la información de la sesión en el HTML de la sección perfil
+        function loadProfile() {
+            document.getElementById('p-name-display').innerText = session.name; // Inserta el nombre en el h2
+            document.getElementById('p-email-display').innerText = session.username; // Inserta el email en el p
+            document.getElementById('p-initial').innerText = session.name.charAt(0).toUpperCase(); // Obtiene la primera letra
+        }
+
+        // READ: Obtiene de la API solo las tareas que le pertenecen a este usuario
+        async function loadTasks() {
+            const res = await fetch(`http://localhost:3000/tasks?userId=${session.id}`); // Filtra tareas por ID de usuario
+            const tasks = await res.json(); // Convierte la respuesta en un array legible
+            const container = document.getElementById('taskList'); // Selecciona el contenedor de la lista
+            container.innerHTML = tasks.length ? tasks.map(t => `
+                <div class="bg-white p-4 rounded-lg shadow-sm flex justify-between items-center border-l-4 ${t.status === 'completed' ? 'border-green-500' : 'border-yellow-500'}">
+                    <div>
+                        <p class="font-bold text-gray-800">${t.title}</p>
+                        <span class="text-[10px] uppercase font-bold text-gray-400">${t.status}</span>
+                    </div>
+                    <div class="flex gap-3">
+                        <select onchange="updateStatus('${t.id}', this.value)" class="text-xs border rounded p-1">
+                            <option value="pending" ${t.status==='pending'?'selected':''}>Pendiente</option>
+                            <option value="in progress" ${t.status==='in progress'?'selected':''}>En Progreso</option>
+                            <option value="completed" ${t.status==='completed'?'selected':''}>Completado</option>
+                        </select>
+                        <button onclick="deleteTask('${t.id}')" class="text-red-500 hover:text-red-700 font-bold">Eliminar</button>
+                    </div>
+                </div>
+            `).join('') : '<p class="text-center text-gray-400 italic">No tienes tareas registradas</p>'; // Mensaje si está vacío
+        }
+
+        // CREATE: Envía una nueva tarea vinculada al ID del usuario actual
+        async function createTask() {
+            const title = document.getElementById('taskTitle').value; // Obtiene el texto escrito por el usuario
+            if(!title) return; // Si está vacío no hace nada
+            await fetch('http://localhost:3000/tasks', { // Petición POST para guardar
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ userId: session.id, title, status: 'pending' }) // Envía ID, Título y estado inicial
+            });
+            document.getElementById('taskTitle').value = ''; // Limpia el campo de texto
+            loadTasks(); // Recarga la lista para mostrar la nueva tarea
+        }
+
+        // UPDATE: Cambia el estado (pending/completed/etc) de una tarea específica
+        async function updateStatus(id, newStatus) {
+            await fetch(`http://localhost:3000/tasks/${id}`, { // Apunta a la tarea exacta por su ID
+                method: 'PATCH', // PATCH actualiza solo el campo indicado
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ status: newStatus }) // Actualiza únicamente el estado
+            });
+            loadTasks(); // Refresca la interfaz
+        }
+
+        // DELETE: Elimina una tarea de la base de datos
+        async function deleteTask(id) {
+            if(confirm('¿Eliminar tarea?')) { // Pide confirmación previa
+                await fetch(`http://localhost:3000/tasks/${id}`, { method: 'DELETE' }); // Petición DELETE a la API
+                loadTasks(); // Refresca la lista
+            }
+        }
+
+        // Finaliza la sesión del usuario
+        function logout() {
+            localStorage.clear(); // Elimina todos los datos de sesión del LocalStorage
+            window.location.href = 'index.html'; // Redirige al inicio (Login)
+        }
+
+        loadTasks(); // Ejecuta la carga de tareas automáticamente al entrar a la página
+    </script>
+</body>
+</html>

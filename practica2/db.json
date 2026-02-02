@@ -1,0 +1,45 @@
+{
+  "users": [
+    {
+      "id": "1",
+      "username": "admin@correo.com",
+      "password": "123",
+      "role": "admin",
+      "name": "Administrador"
+    },
+    {
+      "id": "2",
+      "username": "user@correo.com",
+      "password": "123",
+      "role": "user",
+      "name": "Juan Estudiante"
+    },
+    {
+      "id": "182f",
+      "username": "Ana@correo.com",
+      "password": "123",
+      "role": "user",
+      "name": "Ana"
+    }
+  ],
+  "tasks": [
+    {
+      "id": "1",
+      "userId": "2",
+      "title": "Estudiar JavaScript",
+      "status": "completed"
+    },
+    {
+      "id": "01b2",
+      "userId": "2",
+      "title": "Estudiar Ingles",
+      "status": "pending"
+    },
+    {
+      "id": "7e55",
+      "userId": "182f",
+      "title": "Estudiar Javascript",
+      "status": "in progress"
+    }
+  ]
+}

@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRUDZASO - Task Manager</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="bg-[#f1f5f9] min-h-screen flex font-sans text-slate-800">
+
+    <aside class="w-64 bg-white border-r border-gray-200 flex flex-col">
+        <div class="p-6 flex items-center gap-3">
+            <div class="bg-red-600 w-10 h-10 rounded-lg flex items-center justify-center shadow-md">
+                <span class="text-white font-black text-2xl">C</span>
+            </div>
+            <span class="text-xl font-bold tracking-tight text-slate-800">CRUDZASO</span>
+        </div>
+
+        <nav class="flex-1 px-4 space-y-1 mt-4">
+            <a href="#" class="flex items-center gap-3 p-3 bg-blue-50 text-blue-600 rounded-xl font-bold shadow-sm">
+                <i class="fa-solid fa-border-all"></i> Dashboard
+            </a>
+            <a href="#" class="flex items-center gap-3 p-3 text-slate-400 hover:bg-gray-50 rounded-xl transition">
+                <i class="fa-solid fa-list-check"></i> My Tasks
+            </a>
+            <a href="#" class="flex items-center gap-3 p-3 text-slate-400 hover:bg-gray-50 rounded-xl transition">
+                <i class="fa-solid fa-user"></i> Profile
+            </a>
+        </nav>
+    </aside>
+
+    <main class="flex-1 flex flex-col">
+        <header class="h-16 flex items-center justify-between px-8 bg-transparent">
+            <div class="flex items-center gap-2 text-xs font-medium text-slate-400">
+                <i class="fa-solid fa-house"></i> <span>/ Dashboard</span>
+            </div>
+            <div class="flex items-center gap-4">
+                <i class="fa-solid fa-bell text-slate-400 cursor-pointer"></i>
+                <div class="flex items-center gap-3 border-l pl-4 cursor-pointer group">
+                    <div class="text-right">
+                        <p class="text-xs font-bold text-slate-700" id="admin-name">Admin User</p>
+                        <p class="text-[9px] text-slate-400 uppercase font-bold">System Admin</p>
+                    </div>
+                    <img src="https://ui-avatars.com/api/?name=Admin&background=cbd5e1&color=475569" class="w-8 h-8 rounded-full border border-white shadow-sm">
+                    <i class="fa-solid fa-chevron-down text-[10px] text-slate-400"></i>
+                    <button onclick="logout()" class="ml-2 text-red-500 bg-red-50 p-2 rounded-lg hover:bg-red-500 hover:text-white transition">
+                        <i class="fa-solid fa-right-from-bracket"></i>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <section class="p-8 pt-2 space-y-6">
+            <div class="flex justify-between items-center">
+                <div>
+                    <h2 class="text-2xl font-black text-slate-800">Task Manager</h2>
+                    <p class="text-slate-400 text-sm">Overview of your current academic performance tasks.</p>
+                </div>
+                <button onclick="toggleModal(true)" class="bg-[#2563eb] text-white px-6 py-2 rounded-xl font-bold shadow-lg shadow-blue-200 flex items-center gap-2 text-sm">
+                    <i class="fa-solid fa-plus"></i> New Task
+                </button>
+            </div>
+
+            <div class="grid grid-cols-4 gap-6">
+                <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
+                    <div class="flex justify-between items-start text-slate-400 mb-4"><p class="text-xs font-bold uppercase">Total Tasks</p><i class="fa-solid fa-layer-group text-blue-500"></i></div>
+                    <p class="text-3xl font-black" id="stat-total">0</p>
+                    <p class="text-[10px] text-green-500 font-bold mt-2"><i class="fa-solid fa-arrow-trend-up"></i> +12% from last week</p>
+                </div>
+                <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
+                    <div class="flex justify-between items-start text-slate-400 mb-4"><p class="text-xs font-bold uppercase">Completed</p><i class="fa-solid fa-circle-check text-green-500"></i></div>
+                    <p class="text-3xl font-black" id="stat-completed">0</p>
+                    <p class="text-[10px] text-green-500 font-bold mt-2">✓ On track</p>
+                </div>
+                <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
+                    <div class="flex justify-between items-start text-slate-400 mb-4"><p class="text-xs font-bold uppercase">Completed</p><i class="fa-solid fa-clock text-orange-500"></i></div>
+                    <p class="text-3xl font-black" id="stat-pending">0</p>
+                    <p class="text-[10px] text-orange-600 font-bold mt-2">2 High Priority</p>
+                </div>
+                <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm">
+                    <div class="flex justify-between items-start text-slate-400 mb-4"><p class="text-xs font-bold uppercase">Overall Progress</p><i class="fa-solid fa-chart-line text-purple-500"></i></div>
+                    <p class="text-3xl font-black" id="stat-progress">75%</p>
+                    <p class="text-[10px] text-purple-500 font-bold mt-2 tracking-tighter uppercase">Keep it up!</p>
+                </div>
+            </div>
+
+            <div class="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm flex flex-col gap-4">
+                <div class="flex items-center justify-between">
+                    <div class="relative w-72">
+                        <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-slate-300"></i>
+                        <input type="text" placeholder="Search tasks...." class="w-full pl-10 pr-4 py-2 bg-slate-50 border-none rounded-xl text-xs outline-none focus:ring-1 focus:ring-blue-100">
+                    </div>
+                    <div class="flex bg-slate-100 p-1 rounded-xl text-[10px] font-black uppercase">
+                        <button class="px-4 py-1.5 text-slate-500">All Tasks</button>
+                        <button class="px-4 py-1.5 text-slate-500">Pending</button>
+                        <button class="px-4 py-1.5 bg-white shadow-sm rounded-lg text-slate-800">Completed</button>
+                    </div>
+                </div>
+
+                <table class="w-full text-left">
+                    <thead class="text-[10px] uppercase font-black text-slate-300 border-b border-slate-50">
+                        <tr>
+                            <th class="py-4 px-2">Task Name</th>
+                            <th class="py-4 px-2">Assignee</th>
+                            <th class="py-4 px-2">Status</th>
+                            <th class="py-4 px-2">Priority</th>
+                            <th class="py-4 px-2">Due Date</th>
+                            <th class="py-4 px-2 text-center">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="admin-taskList" class="text-xs divide-y divide-slate-50"></tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <div id="taskModal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center hidden z-50">
+        <div class="bg-white p-8 rounded-[2rem] w-full max-w-md shadow-2xl">
+            <h3 class="text-xl font-black mb-6">New Task Assignment</h3>
+            <form id="createTaskForm" class="space-y-4">
+                <input type="text" id="modal-taskTitle" placeholder="Task Name" class="w-full p-4 bg-slate-50 rounded-2xl outline-none" required>
+                <select id="modal-userId" class="w-full p-4 bg-slate-50 rounded-2xl outline-none" required></select>
+                <div class="grid grid-cols-2 gap-4">
+                    <select id="modal-priority" class="p-4 bg-slate-50 rounded-2xl outline-none">
+                        <option value="High">High</option>
+                        <option value="Medium" selected>Medium</option>
+                        <option value="Low">Low</option>
+                    </select>
+                    <input type="date" id="modal-date" class="p-4 bg-slate-50 rounded-2xl outline-none">
+                </div>
+                <div class="flex gap-4 pt-4">
+                    <button type="button" onclick="toggleModal(false)" class="flex-1 font-bold text-slate-400 uppercase text-xs tracking-widest">Cancel</button>
+                    <button type="submit" class="flex-1 bg-blue-600 text-white p-4 rounded-2xl font-bold shadow-lg shadow-blue-100 uppercase text-xs tracking-widest">Assign</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const API_TASKS = "http://localhost:3000/tasks";
+        const API_USERS = "http://localhost:3000/users";
+        const session = JSON.parse(localStorage.getItem('session'));
+
+        if (!session || session.role !== 'admin') window.location.href = 'index.html';
+        document.getElementById('admin-name').innerText = session.name || "Admin";
+
+        function toggleModal(show) {
+            document.getElementById('taskModal').classList.toggle('hidden', !show);
+            if(show) loadUserOptions();
+        }
+
+        async function loadUserOptions() {
+            const res = await fetch(API_USERS);
+            const users = await res.json();
+            document.getElementById('modal-userId').innerHTML = users.filter(u => u.role !== 'admin').map(u => 
+                `<option value="${u.id}">${u.name}</option>`
+            ).join('');
+        }
+
+        async function loadDashboard() {
+            const [tRes, uRes] = await Promise.all([fetch(API_TASKS), fetch(API_USERS)]);
+            const tasks = await tRes.json();
+            const users = await uRes.json();
+
+            document.getElementById('stat-total').innerText = tasks.length;
+            const completed = tasks.filter(t => t.status === 'completed').length;
+            document.getElementById('stat-completed').innerText = completed;
+            document.getElementById('stat-pending').innerText = tasks.length - completed;
+            document.getElementById('stat-progress').innerText = tasks.length ? Math.round((completed/tasks.length)*100) + '%' : '0%';
+
+            const container = document.getElementById('admin-taskList');
+            container.innerHTML = tasks.map(t => {
+                const user = users.find(u => u.id == t.userId) || { name: 'Student' };
+                const pColor = t.priority === 'High' ? 'text-red-500' : (t.priority === 'Low' ? 'text-green-500' : 'text-orange-500');
+                const dotColor = t.priority === 'High' ? 'bg-red-500' : (t.priority === 'Low' ? 'bg-green-500' : 'bg-orange-500');
+                
+                return `
+                    <tr class="hover:bg-slate-50 transition-all font-medium">
+                        <td class="py-5 px-2 font-bold text-slate-700">${t.title}</td>
+                        <td class="py-5 px-2 text-slate-500">${user.name}</td>
+                        <td class="py-5 px-2">
+                            <span class="px-3 py-1 bg-blue-50 text-blue-500 rounded-lg text-[10px] font-black uppercase">In Progress</span>
+                        </td>
+                        <td class="py-5 px-2">
+                            <div class="flex items-center gap-2">
+                                <div class="w-2 h-2 rounded-full ${dotColor}"></div>
+                                <span class="text-[10px] font-black uppercase ${pColor}">${t.priority}</span>
+                            </div>
+                        </td>
+                        <td class="py-5 px-2 text-slate-400 font-bold">${t.date || 'Oct 24, 2023'}</td>
+                        <td class="py-5 px-2 text-center">
+                            <div class="flex justify-center gap-3">
+                                <i class="fa-solid fa-pen text-slate-300 hover:text-blue-500 cursor-pointer"></i>
+                                <i onclick="deleteTask(${t.id})" class="fa-solid fa-trash text-slate-300 hover:text-red-500 cursor-pointer"></i>
+                            </div>
+                        </td>
+                    </tr>`;
+            }).join('');
+        }
+
+        document.getElementById('createTaskForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const data = {
+                title: document.getElementById('modal-taskTitle').value,
+                userId: document.getElementById('modal-userId').value,
+                priority: document.getElementById('modal-priority').value,
+                date: document.getElementById('modal-date').value,
+                status: 'pending'
+            };
+            await fetch(API_TASKS, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(data) });
+            toggleModal(false);
+            loadDashboard();
+        });
+
+        async function deleteTask(id) {
+            if(confirm('Delete task?')) { await fetch(`${API_TASKS}/${id}`, { method: 'DELETE' }); loadDashboard(); }
+        }
+
+        function logout() { localStorage.clear(); window.location.href = 'index.html'; }
+
+        loadDashboard();
+    </script>
+</body>
+</html>

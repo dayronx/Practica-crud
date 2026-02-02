@@ -1,0 +1,153 @@
+/* Configuración General */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: #f8fafc;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: min-content;
+    height: 100vh;
+    padding: 20px;
+}
+
+/* Logo */
+.logo-container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 32px;
+}
+
+.logo-box {
+    background-color: #334155;
+    padding: 8px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.logo-box svg {
+    width: 24px;
+    height: 24px;
+    color: #f97316; /* Orange-500 */
+}
+
+.logo-text {
+    font-size: 24px;
+    font-weight: bold;
+    color: #1e293b;
+    letter-spacing: -0.025em;
+}
+
+/* Tarjeta de Autenticación */
+.auth-card {
+    background-color: #ffffff;
+    padding: 40px;
+    border-radius: 2rem; /* Bordes muy redondeados como en Figma */
+    border: 1px solid #f1f5f9;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 450px;
+}
+
+.auth-header {
+    text-align: center;
+    margin-bottom: 32px;
+}
+
+.auth-header h2 {
+    font-size: 28px;
+    font-weight: bold;
+    color: #1e293b;
+}
+
+.auth-header p {
+    color: #94a3b8;
+    font-size: 14px;
+    margin-top: 8px;
+}
+
+/* Formulario */
+.form-group {
+    margin-bottom: 16px;
+}
+
+.form-label {
+    display: block;
+    font-size: 12px;
+    font-weight: bold;
+    color: #1e293b;
+    margin-bottom: 8px;
+}
+
+.form-input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    font-size: 14px;
+    color: #64748b;
+    transition: all 0.2s;
+    outline: none;
+}
+
+.form-input:focus {
+    border-color: #1b76ff;
+    box-shadow: 0 0 0 3px rgba(27, 118, 255, 0.1);
+}
+
+.btn-submit {
+    width: 100%;
+    background-color: #1b76ff;
+    color: white;
+    padding: 14px;
+    border: none;
+    border-radius: 12px;
+    font-weight: bold;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    margin-top: 16px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.btn-submit:hover {
+    background-color: #1665d8;
+}
+
+/* Footer de la tarjeta */
+.auth-footer {
+    margin-top: 32px;
+    text-align: center;
+}
+
+.auth-footer p {
+    font-size: 14px;
+    color: #94a3b8;
+}
+
+#toggleAuth {
+    background: none;
+    border: none;
+    color: #1b76ff;
+    font-weight: bold;
+    cursor: pointer;
+    margin-left: 4px;
+}
+
+#toggleAuth:hover {
+    text-decoration: underline;
+}
+
+/* Utilidades */
+.hidden {
+    display: none;
+}
