@@ -137,71 +137,79 @@
         const API_USERS = "http://localhost:3000/users";
         let editingTaskId = null;
 
+        // Cargar Dashboard
         async function loadDashboard() {
-            const [tRes, uRes] = await Promise.all([fetch(API_TASKS), fetch(API_USERS)]);
-            const tasks = await tRes.json();
-            const users = await uRes.json();
+            try {
+                const [tRes, uRes] = await Promise.all([fetch(API_TASKS), fetch(API_USERS)]);
+                const tasks = await tRes.json();
+                const users = await uRes.json();
 
-            document.getElementById('stat-total').innerText = tasks.length;
-            const completedCount = tasks.filter(t => t.status === 'completed').length;
-            document.getElementById('stat-completed').innerText = completedCount;
-            document.getElementById('stat-pending').innerText = tasks.length - completedCount;
+                // Stats
+                document.getElementById('stat-total').innerText = tasks.length;
+                const completedCount = tasks.filter(t => t.status === 'completed').length;
+                document.getElementById('stat-completed').innerText = completedCount;
+                document.getElementById('stat-pending').innerText = tasks.length - completedCount;
 
-            const container = document.getElementById('admin-taskList');
-            
-            // Colores exactos para la prioridad
-            const priorityColors = {
-                'High': '#ef4444',
-                'Medium': '#f59e0b',
-                'Low': '#10b981'
-            };
-
-            container.innerHTML = tasks.map(t => {
-                const user = users.find(u => u.id == t.userId) || { name: 'Student' };
-                let statusClass = t.status === 'completed' ? "bg-completed" : "bg-in-progress";
-                let statusText = t.status === 'completed' ? "Completed" : "In Progress";
+                const container = document.getElementById('admin-taskList');
                 
-                const pColor = priorityColors[t.priority] || '#94a3b8';
-                const isHigh = t.priority === 'High';
+                const priorityColors = { 'High': '#ef4444', 'Medium': '#f59e0b', 'Low': '#10b981' };
 
-                return `
-                    <tr>
-                        <td style="font-weight: bold; color: #334155;">${t.title}</td>
-                        <td style="color: #64748b;">${user.name}</td>
-                        <td><span class="status-badge ${statusClass}">${statusText}</span></td>
-                        <td>
-                            <div style="display: flex; align-items: center; gap: 10px;">
-                                <div style="width: 10px; height: 10px; border-radius: 50%; background-color: ${pColor}; flex-shrink: 0;"></div>
-                                <span style="color: #1e293b; font-size: 14px; font-weight: 500;">${t.priority}</span>
-                            </div>
-                        </td>
-                        <td style="color: ${isHigh ? '#ef4444' : '#64748b'}; font-weight: 500;">
-                            ${t.date || 'Oct 24, 2023'}
-                        </td>
-                        <td style="text-align:center;">
-                            <div style="display:flex; justify-content:center; gap:12px;">
-                                <i onclick="editTask(${t.id})" class="fa-solid fa-pen" style="color: #cbd5e1; cursor:pointer;"></i>
-                                <i onclick="deleteTask(${t.id})" class="fa-solid fa-trash" style="color: #cbd5e1; cursor:pointer;"></i>
-                            </div>
-                        </td>
-                    </tr>`;
-            }).join('');
+                container.innerHTML = tasks.map(t => {
+                    const user = users.find(u => String(u.id) === String(t.userId)) || { name: 'Student' };
+                    let statusClass = t.status === 'completed' ? "bg-completed" : "bg-in-progress";
+                    let statusText = t.status === 'completed' ? "Completed" : "In Progress";
+                    const pColor = priorityColors[t.priority] || '#94a3b8';
+
+                    return `
+                        <tr>
+                            <td style="font-weight: bold; color: #334155;">${t.title}</td>
+                            <td style="color: #64748b;">${user.name}</td>
+                            <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+                            <td>
+                                <div style="display: flex; align-items: center; gap: 10px;">
+                                    <div style="width: 10px; height: 10px; border-radius: 50%; background-color: ${pColor}; flex-shrink: 0;"></div>
+                                    <span style="color: #1e293b; font-size: 14px; font-weight: 500;">${t.priority}</span>
+                                </div>
+                            </td>
+                            <td style="color: ${t.priority === 'High' ? '#ef4444' : '#64748b'}; font-weight: 500;">${t.date || '---'}</td>
+                            <td style="text-align:center;">
+                                <div style="display:flex; justify-content:center; gap:12px;">
+                                    <i onclick="editTask('${t.id}')" class="fa-solid fa-pen" style="color: #cbd5e1; cursor:pointer;"></i>
+                                    <i onclick="deleteTask('${t.id}')" class="fa-solid fa-trash" style="color: #cbd5e1; cursor:pointer;"></i>
+                                </div>
+                            </td>
+                        </tr>`;
+                }).join('');
+            } catch (err) {
+                console.error("Error cargando dashboard:", err);
+            }
         }
 
+        // Editar Tarea - FUNCION CORREGIDA
         async function editTask(id) {
+            console.log("Intentando editar tarea con ID:", id);
             editingTaskId = id;
-            const res = await fetch(`${API_TASKS}/${id}`);
-            const task = await res.json();
-            await loadUserOptions();
             
-            document.getElementById('modal-taskTitle').value = task.title;
-            document.getElementById('modal-userId').value = task.userId;
-            document.getElementById('modal-priority').value = task.priority;
-            document.getElementById('modal-date').value = task.date || "";
-            
-            document.querySelector('#taskModal h3').innerText = "Edit Task";
-            document.getElementById('submit-btn').innerText = "SAVE CHANGES";
-            toggleModal(true);
+            try {
+                const res = await fetch(`${API_TASKS}/${id}`);
+                if (!res.ok) throw new Error("No se pudo obtener la tarea");
+                const task = await res.json();
+
+                await loadUserOptions();
+                
+                document.getElementById('modal-taskTitle').value = task.title;
+                document.getElementById('modal-userId').value = task.userId;
+                document.getElementById('modal-priority').value = task.priority;
+                document.getElementById('modal-date').value = task.date || "";
+                
+                document.querySelector('#taskModal h3').innerText = "Edit Task";
+                document.getElementById('submit-btn').innerText = "SAVE CHANGES";
+                
+                toggleModal(true);
+            } catch (error) {
+                console.error("Error al cargar la tarea para editar:", error);
+                alert("Error al cargar la tarea");
+            }
         }
 
         function toggleModal(show) {
@@ -228,12 +236,6 @@
         document.getElementById('createTaskForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             const taskDate = document.getElementById('modal-date').value;
-            const today = new Date().toISOString().split('T')[0];
-
-            if (taskDate < today) {
-                alert("Please select a current or future date.");
-                return;
-            }
 
             const data = {
                 title: document.getElementById('modal-taskTitle').value,
@@ -242,10 +244,9 @@
                 date: taskDate
             };
 
-            if (!editingTaskId) data.status = 'pending';
-
             const url = editingTaskId ? `${API_TASKS}/${editingTaskId}` : API_TASKS;
             const method = editingTaskId ? 'PATCH' : 'POST';
+            if (!editingTaskId) data.status = 'pending';
 
             await fetch(url, { 
                 method: method, 
